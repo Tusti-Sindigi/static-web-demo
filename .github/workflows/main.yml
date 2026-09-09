@@ -50,7 +50,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'src/' # Deploys only the files inside src/
+          path: './src' # Deploys only the files inside src/
 
       - name: Deploy to GitHub Pages
         id: deployment
