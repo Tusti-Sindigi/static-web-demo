@@ -2,7 +2,8 @@ name: deploy static website
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -10,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
@@ -18,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
+      - name: checkout
         uses: actions/checkout@v4
 
-      - name: setup node.js
+      - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -29,7 +30,7 @@ jobs:
       - name: install dependencies
         run: npm install
 
-      - name: run static site tests
+      - name: run tests
         run: npm test
 
   deploy:
@@ -41,17 +42,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: checkout repository
+      - name: checkout
         uses: actions/checkout@v4
 
-      - name: setup pages
+      - name: configure pages
         uses: actions/configure-pages@v5
 
-      - name: upload pages artifact
+      - name: upload website
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./src"
 
-      - name: deploy to github pages
+      - name: deploy
         id: deployment
         uses: actions/deploy-pages@v4
