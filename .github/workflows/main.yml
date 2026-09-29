@@ -1,10 +1,9 @@
-name: Deploy Static Website
+name: deploy static website
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
-# Grants the workflow permission to publish to GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -15,43 +14,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # STAGE 1: Continuous Integration (CI)
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
+      - name: checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - name: setup node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: "20"
 
-      - name: Install Dependencies
+      - name: install dependencies
         run: npm install
 
-      - name: Run Static Site Tests
+      - name: run static site tests
         run: npm test
 
-  # STAGE 2: Continuous Deployment (CD)
   deploy:
-    needs: test  # CD will only run if the 'test' job passes!
+    needs: test
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
 
-      - name: Setup Pages
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages Artifact
+      - name: upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './src' # Deploys only the files inside src/
+          path: "./src"
 
-      - name: Deploy to GitHub Pages
+      - name: deploy to github pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
